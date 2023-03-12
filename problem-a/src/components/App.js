@@ -13,6 +13,15 @@ function App(props) {
   const [albumData, setAlbumData] = useState([]);
   const [alertMessage, setAlertMessage] = useState(null);
 
+  const fetchAlbumList = (searchTerm) => {
+    const albumUrl = ALBUM_QUERY_TEMPLATE.replace('{searchTerm}', searchTerm);
+
+    fetch(albumUrl)
+      .then(response => response.json())
+      .then(data => setAlbumData(data.results))
+      .catch(error => console.log(error));
+  }
+
   return (
     <div className="container">
       <header className="mb-3">
@@ -30,7 +39,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={
             <> {/* Search Page */}
-              <AlbumSearchForm />
+              <AlbumSearchForm searchCallback={fetchAlbumList} />
               <AlbumList albums={albumData} />
             </>
           } />
